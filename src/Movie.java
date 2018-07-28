@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Movie {
@@ -29,25 +30,19 @@ public class Movie {
         replaceLetters(movieTitle, revealedMovieTitle, guessedLetter, letterExists);
   }
 
-  private static String[] createMovieArray(Scanner movieList) {
+  private ArrayList<String> createMovieArray(Scanner movieList) {
 
-    String[] movieArray = new String[0];
+    ArrayList<String> moviesArray = new ArrayList();
 
     while (movieList.hasNextLine()) {
-      String[] movieArrayTemp = new String[movieArray.length + 1];
-      for (int i = 0; i < movieArray.length; i++) {
-        movieArrayTemp[i] = movieArray[i];
-      }
-      movieArrayTemp[movieArrayTemp.length - 1] = movieList.nextLine();
-      movieArray = movieArrayTemp;
+      moviesArray.add(movieList.nextLine());
     }
-
-    return (movieArray);
+    return (moviesArray);
   }
 
-  private static String pickRandomMovie(String[] movieList) {
-    int randomMovieChoice = (int) ((Math.random() * movieList.length) + 1);
-    return (movieList[randomMovieChoice]);
+  private static String pickRandomMovie(ArrayList<String> movies) {
+    int randomMovieChoice = (int) ((Math.random() * movies.size()) + 1);
+    return (movies.get(randomMovieChoice));
   }
 
   private static String hideLetters(String movieTitle) {
