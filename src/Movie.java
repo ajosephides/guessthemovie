@@ -1,109 +1,88 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Movie {
 
-private String randomMovieTitle;
-private String hiddenMovieTitle;
-private String revealedMovieTitle;
+  private String movieTitle;
+  private String hiddenMovieTitle;
+  private String revealedMovieTitle;
 
+  Movie(Scanner movieList) {
 
-Movie() throws FileNotFoundException{
-
-    randomMovieTitle = randomMovie(createMovieArray("movies.txt")).toLowerCase();
-    hiddenMovieTitle = hideLetters(randomMovieTitle);
+    movieTitle = pickRandomMovie(createMovieArray(movieList)).toLowerCase();
+    hiddenMovieTitle = hideLetters(movieTitle);
     revealedMovieTitle = hiddenMovieTitle;
+  }
 
-}
+  public String getMovieTitle() {
 
+    return this.movieTitle;
+  }
 
-public String getRandomMovieTitle(){
-
-    return this.randomMovieTitle;
-}
-
-public String getHiddenMovieTitle(){
-
-    return this.hiddenMovieTitle;
-}
-
-public String getRevealedMovieTitle(){
+  public String getRevealedMovieTitle() {
 
     return this.revealedMovieTitle;
-}
+  }
 
+  public void updateRevealedMovieTitle(char guessedLetter, boolean letterExists) {
 
-    private static String[] createMovieArray(String fileLocation) throws FileNotFoundException {
+    this.revealedMovieTitle =
+        replaceLetters(movieTitle, revealedMovieTitle, guessedLetter, letterExists);
+  }
 
-        File file = new File(fileLocation);
-        Scanner movieList = new Scanner(file);
-        String[] movieArray = new String[0];
+  private static String[] createMovieArray(Scanner movieList) {
 
-        while (movieList.hasNextLine()) {
-            String[] movieArrayTemp = new String[movieArray.length + 1];
-            for (int i = 0; i < movieArray.length; i++) {
-                movieArrayTemp[i] = movieArray[i];
-            }
-            movieArrayTemp[movieArrayTemp.length - 1] = movieList.nextLine();
-            movieArray = movieArrayTemp;
+    String[] movieArray = new String[0];
+
+    while (movieList.hasNextLine()) {
+      String[] movieArrayTemp = new String[movieArray.length + 1];
+      for (int i = 0; i < movieArray.length; i++) {
+        movieArrayTemp[i] = movieArray[i];
+      }
+      movieArrayTemp[movieArrayTemp.length - 1] = movieList.nextLine();
+      movieArray = movieArrayTemp;
+    }
+
+    return (movieArray);
+  }
+
+  private static String pickRandomMovie(String[] movieList) {
+    int randomMovieChoice = (int) ((Math.random() * movieList.length) + 1);
+    return (movieList[randomMovieChoice]);
+  }
+
+  private static String hideLetters(String movieTitle) {
+
+    String hiddenMovie = "";
+    for (int i = 0; i < movieTitle.length(); i++) {
+
+      char letter = movieTitle.charAt(i);
+      if (letter == ' ') {
+        hiddenMovie = hiddenMovie + " ";
+      } else {
+        hiddenMovie = hiddenMovie + "-";
+      }
+    }
+    return hiddenMovie;
+  }
+
+  private static String replaceLetters(
+      String movieTitle, String guessSoFar, char guessedLetter, boolean letterExists) {
+
+    char[] stringOfChar = guessSoFar.toCharArray();
+    if (letterExists) {
+
+      for (int i = 0; i < movieTitle.length(); i++) {
+
+        char letter = movieTitle.charAt(i);
+        if (letter == guessedLetter) {
+
+          stringOfChar[i] = letter;
         }
-
-        return (movieArray);
+      }
     }
 
+    guessSoFar = String.valueOf(stringOfChar);
 
-
-    private static String randomMovie(String[] movieList) {
-
-        int randomMovieChoice = (int) ((Math.random() * movieList.length) + 1);
-        return (movieList[randomMovieChoice]);
-
-    }
-
-
-    private static String hideLetters(String randomMovie) {
-
-        String hiddenRandomMovie = "";
-        for (int i = 0; i < randomMovie.length(); i++) {
-
-            char letter = randomMovie.charAt(i);
-            if (letter == ' ') {
-                hiddenRandomMovie = hiddenRandomMovie + " ";
-            } else {
-                hiddenRandomMovie = hiddenRandomMovie + "-";
-            }
-        }
-        return hiddenRandomMovie;
-    }
-
-
-    private static String replaceLetters(String randomMovie, String guessSoFar, char guessedLetter, boolean letterExists){
-
-        char[] stringOfChar = guessSoFar.toCharArray();
-
-        if(letterExists){
-
-            for(int i = 0; i < randomMovie.length(); i++){
-
-                char letter = randomMovie.charAt(i);
-                if (letter == guessedLetter) {
-
-                    stringOfChar[i] = letter;
-                }
-            }
-        }
-
-        guessSoFar = String.valueOf(stringOfChar);
-
-        return guessSoFar;
-    }
-
-
-    public void updateRevealedMovieTitle(char guessedLetter, boolean letterExists){
-
-    this.revealedMovieTitle = replaceLetters(randomMovieTitle, revealedMovieTitle,guessedLetter,letterExists);
-
-    }
-
+    return guessSoFar;
+  }
 }

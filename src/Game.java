@@ -1,88 +1,89 @@
 import java.util.Scanner;
 
-
 public class Game {
 
-    private char lastGuessedLetter;
-    private int guessesLeft;
-    private boolean lastGuessCorrect;
-    private boolean hasWon;
+  private char lastGuessedLetter;
+  private int guessesLeft;
+  private boolean lastGuessCorrect;
+  private boolean hasWon;
+  private boolean gameInPlay;
+  private Movie movie;
 
-    Game(){
-        guessesLeft = 10;
+  Game(Scanner movieList) {
+    guessesLeft = 10;
+    gameInPlay = true;
+    hasWon = false;
+    movie = new Movie(movieList);
+  }
+
+  public void playturn(Scanner userInput) {
+
+    setUserGuess(userInput);
+    setLetterExists();
+    setGuessesLeft();
+    movie.updateRevealedMovieTitle(lastGuessedLetter, lastGuessCorrect);
+  }
+
+  public int getGuessesLeft() {
+    return this.guessesLeft;
+  }
+
+  public void updateHasWon() {
+
+    if (movie.getMovieTitle().equalsIgnoreCase(movie.getRevealedMovieTitle())) {
+      this.hasWon = true;
+    } else {
+      this.hasWon = false;
     }
+  }
 
-    public void playturn(String randomMovieTitle){
+  public boolean isHasWon() {
 
-        this.setUserGuess();
-        this.setLetterExists(randomMovieTitle, this.lastGuessedLetter);
-        this.setGuessesLeft();
+    return hasWon;
+  }
 
+  public void updateGameInPlay() {
+    if (!this.hasWon && this.guessesLeft != 0) {
+      this.gameInPlay = true;
+    } else {
+      this.gameInPlay = false;
     }
+  }
 
+  public boolean isGameInPlay() {
+    return gameInPlay;
+  }
 
-    private void setUserGuess(){
+  public String getMovieTitle() {
 
-        Scanner userInput = new Scanner(System.in);
+    return movie.getMovieTitle();
+  }
 
-        char guessedLetter = userInput.nextLine().toLowerCase().charAt(0);
+  public String getRevealedMovieTitle() {
 
-        this.lastGuessedLetter = guessedLetter;
+    return movie.getRevealedMovieTitle();
+  }
 
+  private void setUserGuess(Scanner userInput) {
+
+    char guessedLetter = userInput.nextLine().toLowerCase().charAt(0);
+
+    this.lastGuessedLetter = guessedLetter;
+  }
+
+  private void setLetterExists() {
+
+    if (movie.getMovieTitle().indexOf(this.lastGuessedLetter) >= 0) {
+      this.lastGuessCorrect = true;
+    } else {
+      this.lastGuessCorrect = false;
     }
+  }
 
-    public char getLastGuessedLetter(){
-        return this.lastGuessedLetter;
+  private void setGuessesLeft() {
+
+    if (!this.lastGuessCorrect) {
+      this.guessesLeft = this.guessesLeft - 1;
     }
-
-
-    private void setLetterExists(String movieTitle, char guessedLetter){
-
-        if(movieTitle.indexOf(guessedLetter) >= 0){
-            this.lastGuessCorrect = true;
-        } else {
-            this.lastGuessCorrect = false;
-        }
-    }
-
-    public boolean getLetterExists(){
-
-        return this.lastGuessCorrect;
-    }
-
-
-    private void setGuessesLeft(){
-
-        if(this.lastGuessCorrect){
-
-            this.guessesLeft = this.guessesLeft;
-
-        } else {
-
-            this.guessesLeft = this.guessesLeft - 1;
-        }
-    }
-
-
-    public int getGuessesLeft(){
-        return this.guessesLeft;
-    }
-
-
-
-    public void updateHasWon(String randomMovieTitle, String revealedMovieTitle){
-
-        if(randomMovieTitle.toLowerCase().equals(revealedMovieTitle.toLowerCase())){
-            this.hasWon = true;
-        } else {
-            this.hasWon = false;
-        }
-    }
-
-
-    public boolean isHasWon() {
-        return hasWon;
-    }
-
-
+  }
 }

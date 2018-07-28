@@ -1,47 +1,46 @@
-import java.awt.*;
+import java.io.File;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String [] args) throws Exception {
+  public static void main(String[] args) throws Exception {
 
+    File file = new File("movies.txt");
 
-        Movie gameTime = new Movie();
+    Scanner movieList = new Scanner(file);
 
-        Game letsPlay = new Game();
+    Game letsPlay = new Game(movieList);
 
+    System.out.println("Roll up and good luck. Please make a guess.");
+    System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
+    System.out.println(letsPlay.getRevealedMovieTitle());
 
-        System.out.println("Roll up and good luck. Please make a guess.");
+    while (letsPlay.isGameInPlay()) {
+
+      Scanner userInput = new Scanner(System.in);
+
+      letsPlay.playturn(userInput);
+
+      letsPlay.updateHasWon();
+
+      letsPlay.updateGameInPlay();
+
+      if (letsPlay.isHasWon()) {
+        System.out.println(letsPlay.getMovieTitle());
+        System.out.println("Congratulations. You guessed the movie! What a clever bunny you are.");
+        break;
+      }
+
+      if (letsPlay.getGuessesLeft() != 0) {
+        System.out.println("Correct guess.");
         System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
-        System.out.println(gameTime.getRevealedMovieTitle());
-
-        while(letsPlay.getGuessesLeft() > 0){
-
-            letsPlay.playturn(gameTime.getRandomMovieTitle());
-
-            gameTime.updateRevealedMovieTitle(letsPlay.getLastGuessedLetter(),letsPlay.getLetterExists());
-
-            letsPlay.updateHasWon(gameTime.getRandomMovieTitle(),gameTime.getRevealedMovieTitle());
-
-
-            if(letsPlay.getGuessesLeft()!=0){
-                System.out.println("Please guess again you lovely person");
-                System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
-                System.out.println(gameTime.getRevealedMovieTitle());
-            } else{
-                System.out.println("Unlucky. Game Over.");
-                System.out.println("Oh it was " + gameTime.getRandomMovieTitle() + ". Fool");
-                break;
-            }
-
-            if(letsPlay.isHasWon()){
-                System.out.println("You are amazing. You guessed the movie. What a clever bunny you are.");
-                break;
-}
-
-        }
-
+        System.out.println("Please guess again.");
+        System.out.println(letsPlay.getRevealedMovieTitle());
+      } else {
+        System.out.println("Unlucky. Game Over.");
+        System.out.println("The correct answer is " + letsPlay.getMovieTitle());
+        break;
+      }
     }
-
+  }
 }
-
-
