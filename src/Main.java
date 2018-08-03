@@ -15,32 +15,33 @@ public class Main {
     System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
     System.out.println(letsPlay.getRevealedMovieTitle());
 
-    while (letsPlay.isGameInPlay()) {
+    while (!letsPlay.isHasWon() && !letsPlay.isLastGuess()) {
 
       Scanner userInput = new Scanner(System.in);
 
       letsPlay.playturn(userInput);
 
-      letsPlay.updateHasWon();
-
-      letsPlay.updateGameInPlay();
-
-      if (letsPlay.isHasWon()) {
-        System.out.println(letsPlay.getMovieTitle());
-        System.out.println("Congratulations. You guessed the movie! What a clever bunny you are.");
-        break;
-      }
-
-      if (letsPlay.getGuessesLeft() != 0) {
+      if (letsPlay.isLastGuessCorrect() && !letsPlay.isHasWon()) {
         System.out.println("Correct guess.");
         System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
         System.out.println("Please guess again.");
         System.out.println(letsPlay.getRevealedMovieTitle());
-      } else {
-        System.out.println("Unlucky. Game Over.");
-        System.out.println("The correct answer is " + letsPlay.getMovieTitle());
-        break;
       }
+
+      if (!letsPlay.isLastGuessCorrect() && !letsPlay.isLastGuess()) {
+        System.out.println("Incorrect guess");
+        System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
+        System.out.println("Please guess again.");
+        System.out.println(letsPlay.getRevealedMovieTitle());
+      }
+    }
+
+    if (letsPlay.isHasWon()) {
+      System.out.println(letsPlay.getMovieTitle());
+      System.out.println("Congratulations. You guessed the movie! What a clever bunny you are.");
+    } else {
+      System.out.println("Unlucky. Game Over.");
+      System.out.println("The correct answer is " + letsPlay.getMovieTitle());
     }
   }
 }

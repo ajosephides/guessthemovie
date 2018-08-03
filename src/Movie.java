@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Movie {
@@ -41,7 +42,8 @@ public class Movie {
   }
 
   private static String pickRandomMovie(ArrayList<String> movies) {
-    int randomMovieChoice = (int) ((Math.random() * movies.size()) + 1);
+    Random randomIndex = new Random();
+    int randomMovieChoice = randomIndex.nextInt(movies.size());
     return (movies.get(randomMovieChoice));
   }
 
