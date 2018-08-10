@@ -7,12 +7,14 @@ public class Game {
   private boolean lastGuessCorrect;
   private boolean lastGuess;
   private boolean hasWon;
+  private boolean gameInPlay;
   private Movie movie;
 
   Game(Scanner movieList) {
     guessesLeft = 10;
     hasWon = false;
     lastGuess = false;
+    gameInPlay = true;
     movie = new Movie(movieList);
   }
 
@@ -24,6 +26,7 @@ public class Game {
     movie.updateRevealedMovieTitle(lastGuessedLetter, lastGuessCorrect);
     updateHasWon();
     setLastGuess();
+    setGameInPlay();
   }
 
   public int getGuessesLeft() {
@@ -44,6 +47,11 @@ public class Game {
     return hasWon;
   }
 
+  public boolean isGameInPlay() {
+
+    return gameInPlay;
+  }
+
   public String getMovieTitle() {
 
     return movie.getMovieTitle();
@@ -52,6 +60,15 @@ public class Game {
   public String getRevealedMovieTitle() {
 
     return movie.getRevealedMovieTitle();
+  }
+
+  private void setGameInPlay() {
+
+    if (!hasWon && !lastGuess) {
+      this.gameInPlay = true;
+    } else {
+      this.gameInPlay = false;
+    }
   }
 
   private void updateHasWon() {

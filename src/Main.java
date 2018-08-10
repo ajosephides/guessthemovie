@@ -15,20 +15,19 @@ public class Main {
     System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
     System.out.println(letsPlay.getRevealedMovieTitle());
 
-    while (!letsPlay.isHasWon() && !letsPlay.isLastGuess()) {
+    while (letsPlay.isGameInPlay()) {
 
       Scanner userInput = new Scanner(System.in);
 
       letsPlay.playturn(userInput);
 
-      if (letsPlay.isLastGuessCorrect() && !letsPlay.isHasWon()) {
+      if (letsPlay.isLastGuessCorrect() && letsPlay.isGameInPlay()) {
         System.out.println("Correct guess.");
         System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
         System.out.println("Please guess again.");
         System.out.println(letsPlay.getRevealedMovieTitle());
       }
-
-      if (!letsPlay.isLastGuessCorrect() && !letsPlay.isLastGuess()) {
+      if (!letsPlay.isLastGuessCorrect() && letsPlay.isGameInPlay()) {
         System.out.println("Incorrect guess");
         System.out.println("You have " + letsPlay.getGuessesLeft() + " guesses left");
         System.out.println("Please guess again.");
